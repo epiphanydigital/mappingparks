@@ -1,0 +1,22 @@
+<div class="container-fluid">
+  <div class="row">
+    <!-- THE MAP! -->
+    <div class="col-12 order-md-last col-md-7"></div>
+
+    <!-- A THING THAT LISTS THINGS THAT WILL BE ON THE MAP! -->
+    <div class="col-12 col-md-5">
+      <div class="parks-list-wrapper">
+        <app-loader [isLoading]="isLoading" [message]="'Loading Parks...'"></app-loader>
+        <perfect-scrollbar style="max-height: 700px;">
+          <div>
+            <ul *ngIf="!isLoading" class="list-unstyled">
+              <li *ngFor="let park of parks">
+                {{ park.name }}
+              </li>
+            </ul>
+          </div>
+        </perfect-scrollbar>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+.parks-list-wrapper {
+  padding: 1.5rem 1rem 1.5rem 2rem;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 0.5rem;
+  position: relative;
+  @include media-breakpoint-up(md) {
+    max-height: 800px;
+    overflow: hidden;
+  }
+}
