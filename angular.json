@@ -27,9 +27,14 @@
               "src/apple-touch-icon.png",
               "src/robots.txt",
               "src/manifest.json",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/leaflet/dist/images",
+                "output": "leaflet/"
+              }
             ],
-            "styles": ["src/main.scss"],
+            "styles": ["src/main.scss", "./node_modules/leaflet/dist/leaflet.css"],
             "scripts": []
           },
           "configurations": {
@@ -91,7 +96,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
-            "styles": ["src/main.scss"],
+            "styles": ["src/main.scss", "./node_modules/leaflet/dist/leaflet.css"],
             "assets": [
               "src/favicon.ico",
               "src/apple-touch-icon.png",

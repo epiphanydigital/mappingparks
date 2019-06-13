@@ -12,3 +12,10 @@
     overflow: hidden;
   }
 }
+
+.map {
+  height: 400px;
+  @include media-breakpoint-up(md) {
+    height: 760px;
+  }
+}

@@ -1,7 +1,9 @@
 <div class="container-fluid">
   <div class="row">
     <!-- THE MAP! -->
-    <div class="col-12 order-md-last col-md-7"></div>
+    <div class="col-12 order-md-last col-md-7">
+      <div class="map" leaflet [leafletOptions]="options" [(leafletZoom)]="mapZoom" [(leafletCenter)]="mapCenter"></div>
+    </div>
 
     <!-- A THING THAT LISTS THINGS THAT WILL BE ON THE MAP! -->
     <div class="col-12 col-md-5">
