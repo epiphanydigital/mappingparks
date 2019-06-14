@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { NationalparksService } from '@app/services/nationalparks.service';
 import { latLng, LatLngTuple, tileLayer, icon, marker } from 'leaflet';
+import { LeafletControlLayersConfig } from '@asymmetrik/ngx-leaflet/dist/leaflet/layers/control/leaflet-control-layers-config.model';
 
 @Component({
   selector: 'app-home',
@@ -75,6 +76,7 @@ export class HomeComponent implements OnInit {
   public selectedState: string;
   public mapZoom: number;
   public mapCenter: LatLngTuple = [39, -98];
+  public markerLayers: any[];
 
   public options = {
     layers: [tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' })],
@@ -91,9 +93,11 @@ export class HomeComponent implements OnInit {
     this.updateList();
   }
 
-  public updateList = () => {
+  public updateList = (newState?: string) => {
+    this.isLoading = true;
+    this.selectedState = newState;
     this.npsService
-      .getParks([this.selectedState])
+      .getParks([!!this.selectedState ? this.selectedState : 'VA'])
       .pipe(
         finalize(() => {
           this.isLoading = false;
@@ -101,12 +105,38 @@ export class HomeComponent implements OnInit {
       )
       .subscribe((parks: any) => {
         this.parks = parks.data;
-        if (parks.data.length > 0) {
+        if (this.parks.length > 0) {
           this.mapZoom = 6;
-          let pos: any = ('{' + parks.data[0].latLong + '}').replace('lat', '"lat"').replace('long', '"long"');
-          pos = JSON.parse(pos);
-          this.mapCenter = [pos.lat, pos.long];
+          this.mapCenter = this.getLatLng(this.parks[0]);
+          console.log('mapcenter', this.mapCenter);
+          this.setMarkers();
         }
       });
+  };
+
+  private setMarkers = () => {
+    const markerOptions = {
+      icon: icon({
+        iconSize: [25, 41],
+        iconAnchor: [13, 41],
+        iconUrl: 'assets/marker-icon.png',
+        shadowUrl: 'assets/marker-shadow.png'
+      })
+    };
+    this.markerLayers = [];
+    for (let i = 0; i < this.parks.length; i++) {
+      const latLong = this.getLatLng(this.parks[i]);
+      if (!!latLong) {
+        this.markerLayers.push(marker(latLong, markerOptions));
+      }
+    }
+  };
+
+  private getLatLng = (park: { latLong: LatLngTuple }): LatLngTuple => {
+    if (!!park.latLong) {
+      const pos: any = JSON.parse(('{' + park.latLong + '}').replace('lat', '"lat"').replace('long', '"long"'));
+      return [pos.lat, pos.long];
+    }
+    return null;
   };
 }

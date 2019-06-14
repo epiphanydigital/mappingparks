@@ -2,13 +2,20 @@
   <div class="row">
     <!-- THE MAP! -->
     <div class="col-12 order-md-last col-md-7">
-      <div class="map" leaflet [leafletOptions]="options" [(leafletZoom)]="mapZoom" [(leafletCenter)]="mapCenter"></div>
+      <div class="map" leaflet [leafletOptions]="options" [(leafletZoom)]="mapZoom" [(leafletCenter)]="mapCenter">
+        <div *ngFor="let layer of markerLayers" [leafletLayer]="layer"></div>
+      </div>
     </div>
 
     <!-- A THING THAT LISTS THINGS THAT WILL BE ON THE MAP! -->
     <div class="col-12 col-md-5">
       <div class="parks-list-wrapper">
         <app-loader [isLoading]="isLoading" [message]="'Loading Parks...'"></app-loader>
+
+        <select *ngIf="!isLoading" class="stateSelector" (change)="updateList($event.target.value)">
+          <option *ngFor="let x of stateOptions" [value]="x" [selected]="selectedState == x">{{ x }}</option>
+        </select>
+
         <perfect-scrollbar style="max-height: 700px;">
           <div>
             <ul *ngIf="!isLoading" class="list-unstyled">
